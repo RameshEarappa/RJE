@@ -11,6 +11,7 @@ report 50007 "Process Cash Receipt Jnl"
             var
                 RecPostedSalesInvoiceHdr: Record "Sales Invoice Header";
             begin
+                //if rowcount <= 1 then begin
                 if not GuiAllowed then begin
                     "Cash Receipt Journal Staging".TestField("Applies-To Doc. No.");
                     Clear(RecPostedSalesInvoiceHdr);
@@ -30,12 +31,16 @@ report 50007 "Process Cash Receipt Jnl"
                     "Cash Receipt Journal Staging".Modify();
                     SendNotification("Cash Receipt Journal Staging");
                 end;
+                RowCount += 1;
             end;
+            //end;
 
             trigger OnPreDataItem()
             begin
                 if not GuiAllowed then
                     SetFilter("Entry No.", '>%1', 2130);
+
+                RowCount := 1;
             end;
         }
     }
@@ -60,4 +65,5 @@ report 50007 "Process Cash Receipt Jnl"
 
     var
         Subject: Label 'Mirnah - InBound - Collection - %1';
+        RowCount: Integer;
 }

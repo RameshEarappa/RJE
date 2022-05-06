@@ -180,6 +180,77 @@ page 50027 "Integration Setup"
                     ApplicationArea = All;
                 }
             }
+            group("RJE Automation Count Setup")
+            {
+                field("Transfer Receipt Confirmation"; Rec."Transfer Receipt Confirmation")
+                {
+                    ApplicationArea = All;
+                }
+                field("Sales invoice Staging Count"; Rec."Sales invoice Staging Count")
+                {
+                    ApplicationArea = All;
+                }
+            }
+            //RJE Job Automation-10FEB2022
+            group("RJE Job Automation Setup")
+            {
+                field("Execute Auto GRN After (Hrs)"; Rec."Execute Auto GRN After (Hrs)")
+                {
+                    ApplicationArea = All;
+                }
+                field("Execute TO Staging After (Hrs)"; Rec."Execute TO Staging After (Hrs)")
+                {
+                    ApplicationArea = All;
+                    Caption = 'Execute Trans. Order Staging After (Hrs)';
+                }
+                field("Process Sales Order Staging"; Rec."Process Sales Order Staging")
+                {
+                    ToolTip = 'Specifies the value of the Process Sales Order Staging field.';
+                    ApplicationArea = All;
+                }
+                field("Process Trans. Rec. Conf."; Rec."Process Trans. Rec. Conf.")
+                {
+                    ToolTip = 'Specifies the value of the Transfer Receipt Confirmation field.';
+                    Caption = 'Process Transfer Receipt Confirmation';
+                    ApplicationArea = All;
+                }
+                field("Process Sales Invoice Staging"; Rec."Process Sales Invoice Staging")
+                {
+                    ToolTip = 'Specifies the value of the Process Sales Invoice Staging field.';
+                    ApplicationArea = All;
+                }
+                field("Process Cash Receipt Journal"; Rec."Process Cash Receipt Journal")
+                {
+                    ToolTip = 'Specifies the value of the Process Cash Receipt Journal field.';
+                    ApplicationArea = All;
+                }
+                field("Process TO Unload Stock"; Rec."Process TO Unload Stock")
+                {
+                    ToolTip = 'Specifies the value of the Process TO Unload Stock field.';
+                    ApplicationArea = All;
+                }
+                field("Process Day End Journal"; Rec."Process Day End Journal")
+                {
+                    ToolTip = 'Specifies the value of the Process Day End Journal field.';
+                    ApplicationArea = All;
+                }
+                field("Process Whs Receipt Staging"; Rec."Process Whs Receipt Staging")
+                {
+                    ToolTip = 'Specifies the value of the Process Warehouse Receipt Staging field.';
+                    Caption = 'Process Warehouse Receipt Staging';
+                    ApplicationArea = All;
+                }
+                field("Process Transfer Order Staging"; Rec."Process Transfer Order Staging")
+                {
+                    ToolTip = 'Specifies the value of the Process Transfer Order Staging field.';
+                    ApplicationArea = All;
+                }
+                field("Process Warehouse Pick Staging"; Rec."Process Warehouse Pick Staging")
+                {
+                    ToolTip = 'Specifies the value of the Process Warehouse Pick Staging field.';
+                    ApplicationArea = All;
+                }
+            }
         }
     }
     trigger OnAfterGetRecord()

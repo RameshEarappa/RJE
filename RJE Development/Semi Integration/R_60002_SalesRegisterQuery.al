@@ -8,24 +8,28 @@ REPORT 60002 "Sales Register Query"
         DATAITEM(SalesInvoiceHeader; "Sales Invoice Header")
         {
             DataItemTableView = SORTING("Posting Date");
+            RequestFilterFields = "Posting Date";
             DATAITEM(SalesInvoiceLine; "Sales Invoice Line")
             {
                 DataItemLinkReference = SalesInvoiceHeader;
                 DataItemTableView = WHERE(Type = FILTER(Item));
                 DataItemLink = "Document No." = FIELD("No.");
-
+                RequestFilterFields = "Posting Date";
                 TRIGGER OnAfterGetRecord()
                 VAR
                     ExcelQtyFormat: Text[30];
                     Customer: Record Customer;
+                    Reclocation: Record location;
                     Item: Record Item;
                 BEGIN
+                    //if invoice then begin //Commited based on client feedback
                     ExcelBuffer.NewRow();
                     CLEAR(Customer);
                     CLEAR(Item);
                     ExcelQtyFormat := '#,##0';
                     Customer.GET(SalesInvoiceHeader."Sell-to Customer No.");
                     Item.GET(SalesInvoiceLine."No.");
+                    if Reclocation.get(SalesInvoiceHeader."Location Code") then;
                     ExcelBuffer.AddColumn('INV', FALSE, '', FALSE, FALSE, FALSE, '', ExcelBuffer."Cell Type"::Text);
                     ExcelBuffer.AddColumn(SalesInvoiceHeader."No.", FALSE, '', FALSE, FALSE, FALSE, '', ExcelBuffer."Cell Type"::Text);
                     ExcelBuffer.AddColumn(SalesInvoiceHeader."No.", FALSE, '', FALSE, FALSE, FALSE, '', ExcelBuffer."Cell Type"::Text);
@@ -89,10 +93,12 @@ REPORT 60002 "Sales Register Query"
                     ExcelBuffer.AddColumn(Customer."Sales Price Group", FALSE, '', FALSE, FALSE, FALSE, '', ExcelBuffer."Cell Type"::Text);
                     ExcelBuffer.AddColumn(Customer."Sales Promotion Group", FALSE, '', FALSE, FALSE, FALSE, '', ExcelBuffer."Cell Type"::Text);
                     ExcelBuffer.AddColumn(Customer."Salesperson Code" + ' ' + Customer."Sales Representative Name", FALSE, '', FALSE, FALSE, FALSE, '', ExcelBuffer."Cell Type"::Text);
+                    ExcelBuffer.AddColumn(Customer."Sub-Branch", FALSE, '', FALSE, FALSE, FALSE, '', ExcelBuffer."Cell Type"::Text);
                     ExcelBuffer.AddColumn(Customer.Branch, FALSE, '', FALSE, FALSE, FALSE, '', ExcelBuffer."Cell Type"::Text);
                     ExcelBuffer.AddColumn(Customer.Territory, FALSE, '', FALSE, FALSE, FALSE, '', ExcelBuffer."Cell Type"::Text);
-
-                END;
+                    ExcelBuffer.AddColumn(Reclocation."Default Replenishment Whse.", FALSE, '', FALSE, FALSE, FALSE, '', ExcelBuffer."Cell Type"::Text);
+                end;
+                //END; //Commited based on client feedback
 
             }
 
@@ -166,8 +172,10 @@ REPORT 60002 "Sales Register Query"
                 ExcelBuffer.AddColumn('Sales Price Group', FALSE, '', TRUE, FALSE, FALSE, '', ExcelBuffer."Cell Type"::Text);
                 ExcelBuffer.AddColumn('Sales Promotion Group', FALSE, '', TRUE, FALSE, FALSE, '', ExcelBuffer."Cell Type"::Text);
                 ExcelBuffer.AddColumn('Sales Rep Code & Name', FALSE, '', TRUE, FALSE, FALSE, '', ExcelBuffer."Cell Type"::Text);
+                ExcelBuffer.AddColumn('Region', FALSE, '', TRUE, FALSE, FALSE, '', ExcelBuffer."Cell Type"::Text);
                 ExcelBuffer.AddColumn('Branch', FALSE, '', TRUE, FALSE, FALSE, '', ExcelBuffer."Cell Type"::Text);
                 ExcelBuffer.AddColumn('Territory', FALSE, '', TRUE, FALSE, FALSE, '', ExcelBuffer."Cell Type"::Text);
+                ExcelBuffer.AddColumn('Default Replenishment Warehouse', FALSE, '', TRUE, FALSE, FALSE, '', ExcelBuffer."Cell Type"::Text);
             END;
         }
         //15-03-2021
@@ -175,24 +183,28 @@ REPORT 60002 "Sales Register Query"
         DATAITEM(SalesCrMemoHeader; "Sales Cr.Memo Header")
         {
             DataItemTableView = SORTING("Posting Date");
+            RequestFilterFields = "Posting Date";
             DATAITEM(SalesCrMemoLine; "Sales Cr.Memo Line")
             {
                 DataItemLinkReference = SalesCrMemoHeader;
                 DataItemTableView = WHERE(Type = FILTER(Item));
                 DataItemLink = "Document No." = FIELD("No.");
-
+                RequestFilterFields = "Posting Date";
                 TRIGGER OnAfterGetRecord()
                 VAR
                     ExcelQtyFormat: Text[30];
                     Customer: Record Customer;
+                    RecLocation: Record Location;
                     Item: Record Item;
                 BEGIN
+                    //if not invoice then begin //Commited based on client feedback
                     ExcelBuffer.NewRow();
                     CLEAR(Customer);
                     CLEAR(Item);
                     ExcelQtyFormat := '#,##0';
                     Customer.GET(SalesCrMemoHeader."Sell-to Customer No.");
                     Item.GET(SalesCrMemoLine."No.");
+                    if RecLocation.get(SalesCrMemoHeader."Location Code") then;
                     ExcelBuffer.AddColumn('CRE', FALSE, '', FALSE, FALSE, FALSE, '', ExcelBuffer."Cell Type"::Text);
                     ExcelBuffer.AddColumn(SalesCrMemoHeader."No.", FALSE, '', FALSE, FALSE, FALSE, '', ExcelBuffer."Cell Type"::Text);
                     ExcelBuffer.AddColumn(SalesCrMemoHeader."No.", FALSE, '', FALSE, FALSE, FALSE, '', ExcelBuffer."Cell Type"::Text);
@@ -221,14 +233,14 @@ REPORT 60002 "Sales Register Query"
                     ExcelBuffer.AddColumn(SalesCrMemoLine."Item Category Code", FALSE, '', FALSE, FALSE, FALSE, '', ExcelBuffer."Cell Type"::Text);
                     ExcelBuffer.AddColumn(SalesCrMemoLine."Item Category Code", FALSE, '', FALSE, FALSE, FALSE, '', ExcelBuffer."Cell Type"::Text);
                     ExcelBuffer.AddColumn(SalesCrMemoLine."Location Code", FALSE, '', FALSE, FALSE, FALSE, '', ExcelBuffer."Cell Type"::Text);
-                    ExcelBuffer.AddColumn(SalesCrMemoLine.Quantity, FALSE, '', FALSE, FALSE, FALSE, ExcelQtyFormat, ExcelBuffer."Cell Type"::Number);
-                    ExcelBuffer.AddColumn(SalesCrMemoLine.Quantity, FALSE, '', FALSE, FALSE, FALSE, ExcelQtyFormat, ExcelBuffer."Cell Type"::Number);
+                    ExcelBuffer.AddColumn('-' + Format(SalesCrMemoLine.Quantity), FALSE, '', FALSE, FALSE, FALSE, ExcelQtyFormat, ExcelBuffer."Cell Type"::Number);
+                    ExcelBuffer.AddColumn('-' + Format(SalesCrMemoLine.Quantity), FALSE, '', FALSE, FALSE, FALSE, ExcelQtyFormat, ExcelBuffer."Cell Type"::Number);
                     ExcelBuffer.AddColumn(SalesCrMemoLine."Unit of Measure Code", FALSE, '', FALSE, FALSE, FALSE, '', ExcelBuffer."Cell Type"::Text);
                     ExcelBuffer.AddColumn(SalesCrMemoLine."Shortcut Dimension 1 Code", FALSE, '', FALSE, FALSE, FALSE, '', ExcelBuffer."Cell Type"::Text);
                     ExcelBuffer.AddColumn(SalesCrMemoLine.Description, FALSE, '', FALSE, FALSE, FALSE, '', ExcelBuffer."Cell Type"::Text);
                     ExcelBuffer.AddColumn(SalesCrMemoLine."Shortcut Dimension 2 Code", FALSE, '', FALSE, FALSE, FALSE, '', ExcelBuffer."Cell Type"::Text);
-                    ExcelBuffer.AddColumn(SalesCrMemoLine.Quantity, FALSE, '', FALSE, FALSE, FALSE, ExcelQtyFormat, ExcelBuffer."Cell Type"::Number);
-                    ExcelBuffer.AddColumn(SalesCrMemoLine.Quantity, FALSE, '', FALSE, FALSE, FALSE, ExcelQtyFormat, ExcelBuffer."Cell Type"::Number);
+                    ExcelBuffer.AddColumn('-' + Format(SalesCrMemoLine.Quantity), FALSE, '', FALSE, FALSE, FALSE, ExcelQtyFormat, ExcelBuffer."Cell Type"::Number);
+                    ExcelBuffer.AddColumn('-' + Format(SalesCrMemoLine.Quantity), FALSE, '', FALSE, FALSE, FALSE, ExcelQtyFormat, ExcelBuffer."Cell Type"::Number);
 
                     ExcelBuffer.AddColumn(Item.Brand, FALSE, '', FALSE, FALSE, FALSE, '', ExcelBuffer."Cell Type"::Text);
                     ExcelBuffer.AddColumn(Item.Portfolio, FALSE, '', FALSE, FALSE, FALSE, '', ExcelBuffer."Cell Type"::Text);
@@ -259,11 +271,12 @@ REPORT 60002 "Sales Register Query"
                     ExcelBuffer.AddColumn(Customer."Sales Price Group", FALSE, '', FALSE, FALSE, FALSE, '', ExcelBuffer."Cell Type"::Text);
                     ExcelBuffer.AddColumn(Customer."Sales Promotion Group", FALSE, '', FALSE, FALSE, FALSE, '', ExcelBuffer."Cell Type"::Text);
                     ExcelBuffer.AddColumn(Customer."Salesperson Code" + ' ' + Customer."Sales Representative Name", FALSE, '', FALSE, FALSE, FALSE, '', ExcelBuffer."Cell Type"::Text);
+                    ExcelBuffer.AddColumn(Customer."Sub-Branch", FALSE, '', FALSE, FALSE, FALSE, '', ExcelBuffer."Cell Type"::Text);
                     ExcelBuffer.AddColumn(Customer.Branch, FALSE, '', FALSE, FALSE, FALSE, '', ExcelBuffer."Cell Type"::Text);
                     ExcelBuffer.AddColumn(Customer.Territory, FALSE, '', FALSE, FALSE, FALSE, '', ExcelBuffer."Cell Type"::Text);
-
-                END;
-
+                    ExcelBuffer.AddColumn(RecLocation."Default Replenishment Whse.", FALSE, '', FALSE, FALSE, FALSE, '', ExcelBuffer."Cell Type"::Text);
+                end;
+                //END; //Commited based on client feedback
             }
         }
         //15-03-2021
@@ -276,9 +289,19 @@ REPORT 60002 "Sales Register Query"
         {
             AREA(Content)
             {
-                GROUP(Options)
-                {
-                }
+                //Commited based on client feedback
+                // GROUP(Options)
+                // {
+                //     Caption = 'Options';
+                //     field(Invoice; Invoice)
+                //     {
+                //         ApplicationArea = Basic, Suite;
+                //         Caption = 'Invoice';
+                //         //ToolTip = 'Specifies the date from which the report or batch job processes information.';
+                //         //ShowMandatory = true;
+                //     }
+
+                // }
             }
         }
     }
@@ -300,4 +323,5 @@ REPORT 60002 "Sales Register Query"
         SalesPerson: Record "Salesperson/Purchaser";
         Customer: Record Customer;
         Item: Record Item;
+        Invoice: Boolean;
 }

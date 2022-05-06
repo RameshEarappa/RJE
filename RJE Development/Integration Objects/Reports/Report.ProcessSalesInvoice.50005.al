@@ -10,32 +10,37 @@ report 50005 "Process Sales Invoice"
             trigger OnAfterGetRecord()
             var
                 RecTransferReceiptConfHdr: Record "Transfer Receipt Confirmation";
+                IntegrationSetupL: Record "Integration Setup";
             begin
-                if not GuiAllowed then begin
-                    Clear(RecTransferReceiptConfHdr);
-                    RecTransferReceiptConfHdr.SetRange("Transfer-From Code", "Sales Invoice Header Staging"."Location Code");
-                    RecTransferReceiptConfHdr.SetRange("Posting Date", "Sales Invoice Header Staging"."Posting Date");
-                    if not RecTransferReceiptConfHdr.FindFirst() then
-                        CurrReport.Skip()
-                    else
-                        if not (RecTransferReceiptConfHdr.Status = RecTransferReceiptConfHdr.Status::Synced) then
-                            CurrReport.Skip();
-                end;
+                IntegrationSetupL.Get();
+                if RowCount <= IntegrationSetupL."Sales invoice Staging Count" then begin
+                    if not GuiAllowed then begin
+                        Clear(RecTransferReceiptConfHdr);
+                        RecTransferReceiptConfHdr.SetRange("Transfer-From Code", "Sales Invoice Header Staging"."Location Code");
+                        RecTransferReceiptConfHdr.SetRange("Posting Date", "Sales Invoice Header Staging"."Posting Date");
+                        if not RecTransferReceiptConfHdr.FindFirst() then
+                            CurrReport.Skip()
+                        else
+                            if not (RecTransferReceiptConfHdr.Status = RecTransferReceiptConfHdr.Status::Synced) then
+                                CurrReport.Skip();
+                    end;
 
-                ClearLastError();
-                Commit();
-                if Codeunit.Run(Codeunit::"Process Sales Invoice", "Sales Invoice Header Staging") then begin
-                    "Sales Invoice Header Staging".Status := "Sales Invoice Header Staging".Status::Synced;
-                    "Sales Invoice Header Staging"."Sales Invoice No." := "Sales Invoice Header Staging"."No.";
-                    "Sales Invoice Header Staging"."Error Remarks" := '';
-                    "Sales Invoice Header Staging".Modify();
-                    AssignLotNumbers("Sales Invoice Header Staging", "Sales Invoice Header Staging"."No.");
-                end else begin
-                    "Sales Invoice Header Staging".Status := "Sales Invoice Header Staging".Status::Error;
-                    "Sales Invoice Header Staging"."Sales Invoice No." := '';
-                    "Sales Invoice Header Staging"."Error Remarks" := CopyStr(GetLastErrorText, 1, 250);
-                    "Sales Invoice Header Staging".Modify();
-                    SendNotification("Sales Invoice Header Staging");
+                    ClearLastError();
+                    Commit();
+                    if Codeunit.Run(Codeunit::"Process Sales Invoice", "Sales Invoice Header Staging") then begin
+                        "Sales Invoice Header Staging".Status := "Sales Invoice Header Staging".Status::Synced;
+                        "Sales Invoice Header Staging"."Sales Invoice No." := "Sales Invoice Header Staging"."No.";
+                        "Sales Invoice Header Staging"."Error Remarks" := '';
+                        "Sales Invoice Header Staging".Modify();
+                        AssignLotNumbers("Sales Invoice Header Staging", "Sales Invoice Header Staging"."No.");
+                    end else begin
+                        "Sales Invoice Header Staging".Status := "Sales Invoice Header Staging".Status::Error;
+                        "Sales Invoice Header Staging"."Sales Invoice No." := '';
+                        "Sales Invoice Header Staging"."Error Remarks" := CopyStr(GetLastErrorText, 1, 250);
+                        "Sales Invoice Header Staging".Modify();
+                        SendNotification("Sales Invoice Header Staging");
+                    end;
+                    RowCount += 1;
                 end;
             end;
 
@@ -43,6 +48,8 @@ report 50005 "Process Sales Invoice"
             begin
                 if not GuiAllowed then
                     SetRange("Posting Date", WorkDate());
+
+                RowCount := 1;
             end;
         }
     }
@@ -143,4 +150,5 @@ report 50005 "Process Sales Invoice"
 
     var
         Subject: Label 'Mirnah - InBound - Sales Invoice - %1';
+        RowCount: Integer;
 }

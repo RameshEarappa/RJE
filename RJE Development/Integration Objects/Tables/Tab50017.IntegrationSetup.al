@@ -181,6 +181,66 @@ table 50017 "Integration Setup"
             DataClassification = ToBeClassified;
         }
         //TT-RS=20210511+
+        //11.08.2021
+        field(32; "Transfer Receipt Confirmation"; Integer)
+        {
+            DataClassification = ToBeClassified;
+            Caption = 'Transfer Receipt Confirmation Count';
+        }
+        field(33; "Sales invoice Staging Count"; Integer)
+        {
+            DataClassification = ToBeClassified;
+            Caption = 'Sales Invoice Staging Count';
+        }
+        //11.08.2021
+        //RJE Job Automation-10FEB2022
+        field(34; "Execute Auto GRN After (Hrs)"; Time)
+        {
+            DataClassification = ToBeClassified;
+        }
+        field(35; "Execute TO Staging After (Hrs)"; Time)
+        {
+            DataClassification = ToBeClassified;
+            Caption = 'Execute Trans. Order Staging After (Hrs)';
+        }
+        field(36; "Process Sales Order Staging"; Boolean)
+        {
+            DataClassification = ToBeClassified;
+        }
+        field(37; "Process Trans. Rec. Conf."; Boolean)
+        {
+            DataClassification = ToBeClassified;
+            Caption = 'Process Transfer Receipt Confirmation';
+        }
+        field(38; "Process Sales Invoice Staging"; Boolean)
+        {
+            DataClassification = ToBeClassified;
+        }
+        field(39; "Process Cash Receipt Journal"; Boolean)
+        {
+            DataClassification = ToBeClassified;
+        }
+        field(40; "Process TO Unload Stock"; Boolean)
+        {
+            DataClassification = ToBeClassified;
+        }
+        field(41; "Process Day End Journal"; Boolean)
+        {
+            DataClassification = ToBeClassified;
+        }
+        field(42; "Process Whs Receipt Staging"; Boolean)
+        {
+            DataClassification = ToBeClassified;
+            Caption = 'Process Warehouse Receipt Staging';
+        }
+        field(43; "Process Transfer Order Staging"; Boolean)
+        {
+            DataClassification = ToBeClassified;
+        }
+        field(44; "Process Warehouse Pick Staging"; Boolean)
+        {
+            DataClassification = ToBeClassified;
+        }
     }
     keys
     {

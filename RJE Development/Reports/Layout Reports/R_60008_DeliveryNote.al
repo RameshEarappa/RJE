@@ -21,6 +21,7 @@ REPORT 60008 "Delivery Note"
             COLUMN(CompanyVATReg; CompanyInformationRecG."VAT Registration No.") { }
             COLUMN(CompanyNameArabic; CompNameinArabic) { }
             COLUMN(CompName; CompName) { }
+            COLUMN(CompName1; CompName1) { }
             COLUMN(CompanyAddressArabic; CompanyInformationRecG."Address In Arabic") { }
             COLUMN(CompanyAddress2Arabic; CompanyInformationRecG."Address 2 In Arabic") { }
             COLUMN(CompanyCityArabic; CompanyInformationRecG."City In Arabic") { }
@@ -128,10 +129,12 @@ REPORT 60008 "Delivery Note"
                 if "Posting Date" < CompanyInformationRecG."Date Validation - Company Name" then begin
                     CompNameinArabic := CompanyInformationRecG."Company Name in Arabic";
                     CompName := CompanyInformationRecG."Company Name";
+                    CompName1 := 'ETC';
                     Bool := True;
                 end else begin
                     CompNameinArabic := CompanyInformationRecG."Name in Arabic";
                     CompName := CompanyInformationRecG."Name";
+                    CompName1 := 'BAT Arabia';
                 end;
                 //16-06-2021
             END;
@@ -162,6 +165,7 @@ REPORT 60008 "Delivery Note"
         ItemUOM: Record "Item Unit of Measure";
         CompNameinArabic: Text[250];
         CompName: TExt[250];
+        CompName1: Text[250];
         Bool: Boolean;
 
 }

@@ -11,7 +11,6 @@ REPORT 60003 "Sales Tax Invoice"
             CalcFields = Amount, "Amount Including VAT";
             COLUMN(CompanyLogo; CompanyInformationRecG.Picture) { }
             COLUMN(CompLogo; CompanyInformationRecG."Old Company Logo") { }
-
             COLUMN(Bool; Bool) { }
             COLUMN(SalesCode; "Salesperson Code") { }
             COLUMN(CompanyName; CompanyInformationRecG.Name) { }
@@ -46,10 +45,12 @@ REPORT 60003 "Sales Tax Invoice"
             COLUMN(CustomerAddress1Arabic; Customer."Address 1 - Arabic") { }
             COLUMN(CustomerAddress2Arabic; Customer."Address 2 - Arabic") { }
             COLUMN(CustomerCityArabic; Customer."City In Arabic") { }
+            column(CustomerVatRegNoArabic; Customer."VAT Registration No. In Arabic") { }
             COLUMN(Branch; Branch) { }
             COLUMN(TotalAmountExclVATInWords; TotalAmountExclVATInWords) { }
             COLUMN(TotalVATAmountInWords; TotalVATAmountInWords) { }
             COLUMN(TotalAmountInclVATInWords; TotalAmountInclVATInWords) { }
+            column(Invoice_Discount_Value; "Invoice Discount Amount") { }
             //23-02-2021
             COLUMN(Due_Date; "Due Date") { }
             column(Sales_Name; SalesPeople.Name) { }
@@ -70,7 +71,8 @@ REPORT 60003 "Sales Tax Invoice"
                 COLUMN(Rate; "Sales Invoice Line"."Unit Price") { }
                 COLUMN(Amount; AmountG) { }//"Sales Invoice Line".Amount) { }
                 COLUMN(VATPerc; "Sales Invoice Line"."VAT %") { }
-                COLUMN(VATAmount; ("Sales Invoice Line"."Amount Including VAT" - "Sales Invoice Line"."VAT Base Amount")) { }
+                //COLUMN(VATAmount; ("Sales Invoice Line"."Amount Including VAT" - "Sales Invoice Line"."VAT Base Amount")) { }
+                column(VATAmount; VATAmount) { }
                 COLUMN(TotalAmount; "Sales Invoice Line"."Amount Including VAT") { }
 
                 TRIGGER OnPreDataItem()
@@ -79,62 +81,25 @@ REPORT 60003 "Sales Tax Invoice"
                 END;
 
                 TRIGGER OnAfterGetRecord()
+                var
+                    Amt: Decimal;
                 BEGIN
                     CLEAR(Item);
                     IF Item.Get("No.") THEN;
                     SrNo += 1;
                     //23-08-21
                     AmountG := Quantity * "Unit Price";
-                    TotalAmountExclVAT += Amount;
-                    TotalVATAmount += ("Amount Including VAT" - Amount);
-                    TotalAmountInclVAT += "Amount Including VAT";
+                    //09-12-2021
+                    if "Line Discount Amount" <> 0 then begin
+                        Amt := AmountG - "Line Discount Amount";
+                        VATAmount := (Amt * "VAT %") / 100;
+                    end else
+                        VATAmount := (AmountG * "VAT %") / 100;
+                    //09-12-2021
                 END;
 
                 TRIGGER OnPostDataItem()
                 BEGIN
-                    //Amount in Words
-                    IF TotalAmountExclVAT <> 0 THEN BEGIN
-                        CLEAR(DecimalValue);
-                        DecimalValue := ROUND(TotalAmountExclVAT) MOD 1 * 100;
-                        MyAmountInWords.InitTextVariable();
-                        MyAmountInWords.FormatNoText(DecimalValueInWords, DecimalValue, '');
-                        IF DecimalValueInWords[1] = '' THEN
-                            DecimalValueInWords[1] := 'ZERO';
-
-                        MyAmountInWords.FormatNoText(TotalAmountExclVATWords, TotalAmountExclVAT, '');
-                        TotalAmountExclVATInWords := TotalAmountExclVATWords[1] + ' SAUDI RIYALS AND ' + DecimalValueInWords[1] + ' HALALAS ONLY';
-                    END;
-                    //Amount in Words Excl VAT
-
-                    //Amount in Words VAT Amount
-                    IF TotalVATAmount <> 0 THEN BEGIN
-                        CLEAR(DecimalValue);
-                        CLEAR(DecimalValueInWords);
-                        DecimalValue := ROUND(TotalVATAmount) MOD 1 * 100;
-                        MyAmountInWords.InitTextVariable();
-                        MyAmountInWords.FormatNoText(DecimalValueInWords, DecimalValue, '');
-                        IF DecimalValueInWords[1] = '' THEN
-                            DecimalValueInWords[1] := 'ZERO';
-
-                        MyAmountInWords.FormatNoText(TotalVATAmountWords, TotalVATAmount, '');
-                        TotalVATAmountInWords := TotalVATAmountWords[1] + ' SAUDI RIYALS AND ' + DecimalValueInWords[1] + ' HALALAS ONLY';
-                    END;
-                    //Amount in Words VAT Amount
-
-                    //Amount in Words VAT Amount
-                    IF TotalAmountInclVAT <> 0 THEN BEGIN
-                        CLEAR(DecimalValue);
-                        CLEAR(DecimalValueInWords);
-                        DecimalValue := ROUND(TotalAmountInclVAT) MOD 1 * 100;
-                        MyAmountInWords.InitTextVariable();
-                        MyAmountInWords.FormatNoText(DecimalValueInWords, DecimalValue, '');
-                        IF DecimalValueInWords[1] = '' THEN
-                            DecimalValueInWords[1] := 'ZERO';
-
-                        MyAmountInWords.FormatNoText(TotalAmountInclVATWords, TotalAmountInclVAT, '');
-                        TotalAmountInclVATInWords := TotalAmountInclVATWords[1] + ' SAUDI RIYALS AND ' + DecimalValueInWords[1] + ' HALALAS ONLY';
-                    END;
-                    //Amount in Words VAT Amount
 
 
                 END;
@@ -216,6 +181,58 @@ REPORT 60003 "Sales Tax Invoice"
                     CompName := CompanyInformationRecG."Name";
                 end;
                 //16-06-2021
+
+                TotalAmountExclVAT := 0;
+                TotalVATAmount := 0;
+                TotalAmountInclVAT := 0;
+                TotalAmountExclVAT := Amount;
+                TotalVATAmount := ("Amount Including VAT" - Amount);
+                TotalAmountInclVAT := "Amount Including VAT";
+
+                //Amount in Words
+                IF TotalAmountExclVAT <> 0 THEN BEGIN
+                    CLEAR(DecimalValue);
+                    DecimalValue := ROUND(TotalAmountExclVAT) MOD 1 * 100;
+                    MyAmountInWords.InitTextVariable();
+                    MyAmountInWords.FormatNoText(DecimalValueInWords, DecimalValue, '');
+                    IF DecimalValueInWords[1] = '' THEN
+                        DecimalValueInWords[1] := 'ZERO';
+
+                    MyAmountInWords.FormatNoText(TotalAmountExclVATWords, TotalAmountExclVAT, '');
+                    TotalAmountExclVATInWords := TotalAmountExclVATWords[1] + ' SAUDI RIYALS AND ' + DecimalValueInWords[1] + ' HALALAS ONLY';
+                END;
+                //Amount in Words Excl VAT
+
+                //Amount in Words VAT Amount
+                IF TotalVATAmount <> 0 THEN BEGIN
+                    CLEAR(DecimalValue);
+                    CLEAR(DecimalValueInWords);
+                    DecimalValue := ROUND(TotalVATAmount) MOD 1 * 100;
+                    MyAmountInWords.InitTextVariable();
+                    MyAmountInWords.FormatNoText(DecimalValueInWords, DecimalValue, '');
+                    IF DecimalValueInWords[1] = '' THEN
+                        DecimalValueInWords[1] := 'ZERO';
+
+                    MyAmountInWords.FormatNoText(TotalVATAmountWords, TotalVATAmount, '');
+                    TotalVATAmountInWords := TotalVATAmountWords[1] + ' SAUDI RIYALS AND ' + DecimalValueInWords[1] + ' HALALAS ONLY';
+                END;
+                //Amount in Words VAT Amount
+
+                //Amount in Words VAT Amount
+                IF TotalAmountInclVAT <> 0 THEN BEGIN
+                    CLEAR(DecimalValue);
+                    CLEAR(DecimalValueInWords);
+                    DecimalValue := ROUND(TotalAmountInclVAT) MOD 1 * 100;
+                    MyAmountInWords.InitTextVariable();
+                    MyAmountInWords.FormatNoText(DecimalValueInWords, DecimalValue, '');
+                    IF DecimalValueInWords[1] = '' THEN
+                        DecimalValueInWords[1] := 'ZERO';
+
+                    MyAmountInWords.FormatNoText(TotalAmountInclVATWords, TotalAmountInclVAT, '');
+                    TotalAmountInclVATInWords := TotalAmountInclVATWords[1] + ' SAUDI RIYALS AND ' + DecimalValueInWords[1] + ' HALALAS ONLY';
+                END;
+                //Amount in Words VAT Amount
+
             END;
 
             TRIGGER OnPostDataItem()
@@ -233,6 +250,7 @@ REPORT 60003 "Sales Tax Invoice"
 
     VAR
         CompanyInformationRecG: Record "Company Information";
+        VATAmount: Decimal;
         Customer: Record Customer;
         Item: Record Item;
         SrNo: Integer;
@@ -261,5 +279,4 @@ REPORT 60003 "Sales Tax Invoice"
         CompName: text[250];
         Bool: Boolean;
         AmountG: Decimal;
-
 }

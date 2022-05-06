@@ -8,7 +8,10 @@ report 50004 "Process Sales Orders"
         {
             DataItemTableView = sorting("Entry No.") order(ascending) where(Status = const("Ready To Sync"));
             trigger OnAfterGetRecord()
+            var
+                integrationSetupL: Record "Integration Setup";
             begin
+                //if RowCount <= 10 then begin
                 ClearLastError();
                 Commit();
                 if Codeunit.Run(Codeunit::"Process Sales Order", "Sales Order Header Staging") then begin
@@ -24,7 +27,9 @@ report 50004 "Process Sales Orders"
                     "Sales Order Header Staging".Modify();
                     SendNotification("Sales Order Header Staging");
                 end;
-            end;
+                RowCount += 1;
+            END;
+            //end;
 
             trigger OnPostDataItem()
             var
@@ -35,6 +40,11 @@ report 50004 "Process Sales Orders"
                     if SendWarehouseStocks.Run() then;
                 end
 
+            end;
+
+            trigger OnPreDataItem()
+            begin
+                RowCount := 1;
             end;
         }
     }
@@ -59,4 +69,5 @@ report 50004 "Process Sales Orders"
     var
         SendWarehouseStocksRequired: Boolean;
         Subject: Label 'Mirnah - InBound - Sales Order - %1';
+        RowCount: Integer;
 }

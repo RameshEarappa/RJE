@@ -3879,7 +3879,7 @@ Cstr
                     <Paragraph>
                       <TextRuns>
                         <TextRun>
-                          <Value>I warrant the details are given are correct and confirm the goods are able to be delivered under ETC Supply Chain standard condition of business. </Value>
+                          <Value>="I warrant the details are given are correct and confirm the goods are able to be delivered under" +" "+Fields!CompName1.Value+" "+ "Supply Chain standard condition of business."</Value>
                           <Style>
                             <FontFamily>Segoe UI</FontFamily>
                             <FontSize>7.5pt</FontSize>
@@ -4404,6 +4404,9 @@ End Function
         </Field>
         <Field Name="CompName">
           <DataField>CompName</DataField>
+        </Field>
+        <Field Name="CompName1">
+          <DataField>CompName1</DataField>
         </Field>
         <Field Name="CompanyAddressArabic">
           <DataField>CompanyAddressArabic</DataField>

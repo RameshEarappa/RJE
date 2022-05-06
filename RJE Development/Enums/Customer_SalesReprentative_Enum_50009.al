@@ -1,4 +1,4 @@
-enum 50009 "Customer Sales Representative Code"
+enum 50009 "Customer Sales Representative"
 {
     Extensible = true;
     //Type (DR, WS-DR, SD-AM, RM, HoReCa-DR, KA-DR)

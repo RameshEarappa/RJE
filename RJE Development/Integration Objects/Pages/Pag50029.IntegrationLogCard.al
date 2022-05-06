@@ -75,6 +75,13 @@ page 50029 "Integration Log Card"
                     ApplicationArea = All;
                     Editable = false;
                 }
+                //RJE Job Automation-10FEB2022
+                field(ResponseDuration; ResponseDuration)
+                {
+                    ApplicationArea = All;
+                    Caption = 'Duration';
+                    Editable = false;
+                }
             }
         }
     }
@@ -112,9 +119,11 @@ page 50029 "Integration Log Card"
         Clear(ResponseData);
         //RequestData := Rec.GetRequestData();
         ResponseData := Rec.GetResponseData();
+        ResponseDuration := Rec."Response Time" - Rec."Request Time";
     end;
 
     var
         RequestData: Text;
         ResponseData: Text;
+        ResponseDuration: Duration;
 }

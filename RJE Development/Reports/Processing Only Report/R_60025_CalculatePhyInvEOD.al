@@ -357,7 +357,8 @@ report 60025 "Calculate Inventory EOD"
 
             SourceCodeSetup.Get();
         end;
-        NextLineNo := NextLineNo + 10000;
+        //NextLineNo := NextLineNo + 10000;//Throwing error as its exceeding the length of Integer
+        NextLineNo := NextLineNo + 10;
 
         if (Quantity2 <> 0) or ZeroQty then begin
             if (Quantity2 = 0) and Location."Bin Mandatory" and not Location."Directed Put-away and Pick"

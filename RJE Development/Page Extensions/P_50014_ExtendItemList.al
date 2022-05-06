@@ -1,5 +1,39 @@
 pageextension 50014 "ItemList_Ext" extends "Item List"
 {
+    layout
+    {
+        addafter(Blocked)
+        {
+            field("FOC Nominal Cost For VAT calc."; Rec."FOC Nominal Cost For VAT calc.")
+            {
+                ApplicationArea = All;
+            }
+            field(Brand; Rec.Brand)
+            {
+                ApplicationArea = All;
+            }
+            field("Product Reporting Group"; Rec."Product Reporting Group")
+            {
+                ApplicationArea = All;
+            }
+            field("SKU Reporting Group"; Rec."SKU Reporting Group")
+            {
+                ApplicationArea = All;
+            }
+            field("Product Type"; Rec."Product Type")
+            {
+                ApplicationArea = All;
+            }
+            field(Active; Rec.Active)
+            {
+                ApplicationArea = All;
+            }
+            field("SKU Obselete Status"; Rec."SKU Obselete Status")
+            {
+                ApplicationArea = All;
+            }
+        }
+    }
     actions
     {
         // Add changes to page actions here

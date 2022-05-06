@@ -1,6 +1,7 @@
 /// <summary>
 /// Codeunit Post Sales Gen. Journal (ID 50016).
 /// </summary>
+/*
 codeunit 50021 "Post Sales Gen. Journal"
 {
     trigger OnRun()
@@ -183,3 +184,4 @@ codeunit 50021 "Post Sales Gen. Journal"
         CrVATAmount: Decimal;
 
 }
+*/

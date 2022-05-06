@@ -46,6 +46,14 @@ page 50019 "Transfer Orders Unload Stock"
                 {
                     ApplicationArea = All;
                 }
+                field("Day End Process Status"; Rec."Day End Process Status")
+                {
+                    ApplicationArea = All;
+                }
+                field("Day End Process Error"; Rec."Day End Process Error")
+                {
+                    ApplicationArea = All;
+                }
             }
         }
     }

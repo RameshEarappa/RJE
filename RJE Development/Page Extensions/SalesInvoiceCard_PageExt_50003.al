@@ -26,4 +26,5 @@ pageextension 50003 SalesInvoiceCard extends "Sales Invoice"
             }
         }
     }
+
 }

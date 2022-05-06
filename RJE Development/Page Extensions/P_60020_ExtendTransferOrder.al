@@ -172,9 +172,11 @@ pageextension 60020 "Extend Transfer Order" extends "Transfer Order"
                         EventsubsriberL: Codeunit EventSubscriber;
                         IsHandled: Boolean;
                     begin
+                        //11.08.2021
                         OnBeforeSendApprovalRequest(Rec, IsHandled);
                         if IsHandled then
                             exit;
+                        //11.08.2021
                         Rec.TestField(Status, Rec.Status::Open);
                         EventsubsriberL.CheckMultipleItem(Rec);
                         if WfInitCode.CheckWorkflowEnabled(Rec) then begin
@@ -351,10 +353,12 @@ pageextension 60020 "Extend Transfer Order" extends "Transfer Order"
         CurrPage.Update(false);
     end;
 
+    //11.08.2021
     [IntegrationEvent(false, false)]
     procedure OnBeforeSendApprovalRequest(Var Rec: Record "Transfer Header"; Var IsHandled: Boolean)
     begin
     end;
+    //11.08.2021
 
     VAR
         GetSourceDocuments: Report "Get Source Documents";

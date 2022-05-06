@@ -331,8 +331,13 @@ pageextension 50000 "Customer Card" extends "Customer Card"
                 ApplicationArea = All;
             }
         }
-
-
+        addafter("VAT Registration No.")
+        {
+            field("VAT Registration No. In Arabic"; Rec."VAT Registration No. In Arabic")
+            {
+                ApplicationArea = All;
+            }
+        }
     }
     actions
     {

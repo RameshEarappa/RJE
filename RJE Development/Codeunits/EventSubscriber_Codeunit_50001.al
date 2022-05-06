@@ -251,6 +251,7 @@ codeunit 50001 EventSubscriber
         TransferShipmentHeader."Transfer-From Salesperson Code" := TransferHeader."Transfer-From Salesperson Code";
         TransferShipmentHeader."Transfer-From Salesperson Name" := TransferHeader."Transfer-From Salesperson Name";
         TransferShipmentHeader."Mirnah Reference No." := TransferHeader."Mirnah Reference No.";
+        TransferShipmentHeader."Posting Date" := TransferHeader."Shipment Date";
         TransferShipmentHeader.Modify();
     end;
 
@@ -267,6 +268,7 @@ codeunit 50001 EventSubscriber
         TransRcptHeader."Transfer-From Salesperson Code" := TransHeader."Transfer-From Salesperson Code";
         TransRcptHeader."Transfer-From Salesperson Name" := TransHeader."Transfer-From Salesperson Name";
         TransRcptHeader."Mirnah Reference No." := TransHeader."Mirnah Reference No.";
+        TransRcptHeader."Posting Date" := TransHeader."Receipt Date";
         TransRcptHeader.Modify();
     end;
 
@@ -284,6 +286,7 @@ codeunit 50001 EventSubscriber
         WhseShptHeader."Transfer-From Salesperson Code" := TransferHeader."Transfer-From Salesperson Code";
         WhseShptHeader."Transfer-From Salesperson Name" := TransferHeader."Transfer-From Salesperson Name";
         WhseShptHeader."Mirnah Reference No." := TransferHeader."Mirnah Reference No.";
+        WhseShptHeader."Posting Date" := TransferHeader."Shipment Date";
         WhseShptHeader.Modify();
     end;
 
@@ -300,6 +303,7 @@ codeunit 50001 EventSubscriber
         WhseReceiptHeader."Transfer-From Salesperson Code" := TransferHeader."Transfer-From Salesperson Code";
         WhseReceiptHeader."Transfer-From Salesperson Name" := TransferHeader."Transfer-From Salesperson Name";
         WhseReceiptHeader."Mirnah Reference No." := TransferHeader."Mirnah Reference No.";
+        WhseReceiptHeader."Posting Date" := TransferHeader."Receipt Date";
         WhseReceiptHeader.Modify();
     end;
 

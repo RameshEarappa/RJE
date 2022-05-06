@@ -301,7 +301,6 @@ codeunit 50013 AssignLotNoToSalesLines
         RecResevEntry: Record "Reservation Entry";
     begin
         clear(RecResevEntry);
-        RecResevEntry.LockTable();
         RecResevEntry.SetRange("Item No.", ItemNo);
         RecResevEntry.SetRange("Location Code", LocationCode);
         RecResevEntry.SetRange("Lot No.", LotNo);

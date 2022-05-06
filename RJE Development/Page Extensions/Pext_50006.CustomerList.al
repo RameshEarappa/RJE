@@ -2,7 +2,69 @@ pageextension 50007 CustomerList extends "Customer List"
 {
     layout
     {
-        // Add changes to page layout here
+        addafter("Currency Code")
+        {
+            field("Max QTY of Open Invoices"; Rec."Max QTY of Open Invoices")
+            {
+                ApplicationArea = All;
+            }
+            field("Payment Method Code"; Rec."Payment Method Code")
+            {
+                ApplicationArea = All;
+            }
+            field("Block on Overdue"; Rec."Block on Overdue")
+            {
+                ApplicationArea = All;
+            }
+            field("Maximum SO Quantity"; Rec."Maximum SO Quantity")
+            {
+                ApplicationArea = All;
+            }
+            field("Maximum SO Value"; Rec."Maximum SO Value")
+            {
+                ApplicationArea = All;
+            }
+            field("Trans. Summary Customer Code"; Rec."Trans. Summary Customer Code")
+            {
+                ApplicationArea = All;
+            }
+            field("RCS Code"; Rec."RCS Code")
+            {
+                ApplicationArea = All;
+            }
+            field("Customer Type"; Rec."Customer Type")
+            {
+                ApplicationArea = All;
+            }
+            field("Chain Name"; Rec."Chain Name")
+            {
+                ApplicationArea = All;
+            }
+            field("Sales Channel Type"; Rec."Sales Channel Type")
+            {
+                ApplicationArea = All;
+            }
+            field("Sales Order Type"; Rec."Sales Order Type")
+            {
+                ApplicationArea = All;
+            }
+            field("Activity Code"; Rec."Activity Code")
+            {
+                ApplicationArea = All;
+            }
+        }
+        addafter("Customer Price Group")
+        {
+            field("Sub-Branch"; Rec."Sub-Branch")
+            {
+                ApplicationArea = All;
+                Caption = 'Region';
+            }
+            field(Branch; Rec.Branch)
+            {
+                ApplicationArea = All;
+            }
+        }
     }
 
     actions

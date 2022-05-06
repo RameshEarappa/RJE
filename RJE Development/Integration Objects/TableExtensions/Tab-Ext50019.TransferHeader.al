@@ -56,6 +56,16 @@ tableextension 50019 "Transfer Header" extends "Transfer Header"
                 Rec.Validate("In-Transit Code", IntegrationSetup."In-Transit Code");
             END;
         }
+        modify("Posting Date")
+        {
+            trigger OnAfterValidate()
+            var
+
+            BEGIN
+                VALIDATE("Shipment Date", "Posting Date");
+                VALIDATE("Receipt Date", "Posting Date");
+            END;
+        }
         field(50007; "VAN Unloading TO"; Boolean)
         {
             DataClassification = ToBeClassified;

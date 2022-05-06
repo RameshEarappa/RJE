@@ -19,7 +19,13 @@ tableextension 50007 "GLEntry Ext" extends "G/L Entry"
             DataClassification = ToBeClassified;
             Caption = 'Applies-To Doc. No.';
         }
-        field(50004; "MH_Applies-To Doc. Type"; Text[20])
+        field(50004; "MH_Applies-To Doc. Type"; Enum "Gen. Journal Account Type")
+        {
+            DataClassification = ToBeClassified;
+            Caption = 'Applies-To Doc. Type';
+            ObsoleteState = Removed;
+        }
+        field(50005; "MH Applies-To Doc. Type"; Text[20])
         {
             DataClassification = ToBeClassified;
             Caption = 'Applies-To Doc. Type';

@@ -138,13 +138,15 @@ pageextension 50005 ItemCard extends "Item Card"
                 ApplicationArea = All;
                 Caption = 'FOC/Disc Nominal Cost For VAT calc.';
             }
+            /*
             //TT-RS-20210511-
             field(Discount; Rec."Discount")
             {
                 ApplicationArea = All;
                 Caption = 'Discount';
             }
-            //TT-RS-20210511+ 
+            //TT-RS-20210511+
+            */
             field("HS Code"; Rec."HS Code")
             {
                 ApplicationArea = All;

@@ -54,6 +54,16 @@ table 50011 "Transfer Order Unload Header"
         {
             DataClassification = ToBeClassified;
         }
+        //Added on 8FRB2022 for Agility Automation
+        field(10; "Day End Process Status"; Option)
+        {
+            DataClassification = ToBeClassified;
+            OptionMembers = " ",Success,Failed;
+        }
+        field(11; "Day End Process Error"; Text[250])
+        {
+            DataClassification = ToBeClassified;
+        }
     }
     keys
     {

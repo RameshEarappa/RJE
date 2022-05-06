@@ -105,7 +105,7 @@ codeunit 50006 "Process Sales Invoice"
                 RecSalesLine.Validate(Quantity, RecSalesInvLineStaging.Quantity);
                 RecSalesLine.Validate("Unit Price", RecSalesInvLineStaging."Unit Price");
                 RecSalesLine.Validate("Free Sample Quantity", RecSalesInvLineStaging."Free Sample Quantity");
-                RecSalesLine.Validate("VAT %", RecSalesInvLineStaging."VAT %");
+                //RecSalesLine.Validate("VAT %", RecSalesInvLineStaging."VAT %");
                 RecSalesLine.Validate("Line Discount Amount", RecSalesInvLineStaging."Line Discount Amount"); //TT-RS-20210513 Vuse Device Discounting Price
                 if RecSalesLine.IsInventoriableItem() then
                     RecSalesLine.Validate("Bin Code", RecSalesInvLineStaging."Bin Code");

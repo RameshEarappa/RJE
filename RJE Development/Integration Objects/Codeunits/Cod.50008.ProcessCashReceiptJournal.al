@@ -46,16 +46,6 @@ codeunit 50008 "Process Cash Receipt Jnl"
         RecCustLedEntry.SetRange("Document No.", Rec."Document No.");
         if not RecCustLedEntry.IsEmpty then
             Error('Record already exists in the table %1 with Document No. %2', RecCustLedEntry.TableCaption, Rec."Document No.");
-        //02.08.2021
-        //Validating in GLEntry
-        Clear(GLEntryL);
-        GLEntryL.SetCurrentKey("Document No.", "MH_Applies-To Doc. No.", Amount);
-        GLEntryL.SetRange("Document No.", Rec."Document No.");
-        GLEntryL.SetRange(Amount, Rec.Amount);
-        GLEntryL.SetRange("MH_Applies-To Doc. No.", Rec."Applies-To Doc. No.");
-        GLEntryL.SetRange(Amount, Rec.Amount);
-        if GLEntryL.FindFirst() then
-            Error('Record already exists in the table %1 with Document No. %2, Applies-To Doc. No. %3, Amount %4', GLEntryL.TableCaption, GLEntryL."Document No.", GLEntryL."MH_Applies-To Doc. No.", GLEntryL.Amount);
 
         Clear(RecGenJnlLine);
         RecGenJnlLine.SetCurrentKey("Journal Template Name", "Journal Batch Name", "Line No.");
@@ -144,7 +134,7 @@ codeunit 50008 "Process Cash Receipt Jnl"
     [EventSubscriber(ObjectType::Codeunit, Codeunit::"Gen. Jnl.-Post Line", 'OnAfterInitGLEntry', '', false, false)]
     local procedure OnCodeOnAfterGenJnlPostBatchRun(GenJournalLine: Record "Gen. Journal Line"; var GLEntry: Record "G/L Entry")
     begin
-        GLEntry."MH_Applies-To Doc. Type" := Format(GenJournalLine."Applies-to Doc. Type");
+        GLEntry."MH Applies-To Doc. Type" := Format(GenJournalLine."Applies-to Doc. Type");
         GLEntry."MH_Applies-To Doc. No." := GenJournalLine."Applies-to Doc. No.";
     end;
 
@@ -180,13 +170,12 @@ codeunit 50008 "Process Cash Receipt Jnl"
         var SalesLine: Record "Sales Line";
         var SalesLineDiscount: Record "Sales Line Discount")
     begin
-        if SalesLine.Type = SalesLine.Type::Item then
-            if SalesLineDiscount."Line Discount %" <> 0 then begin
-                if SalesLineDiscount."Sales Code" <> '' then
-                    SalesLine."Promotion Code Applied" := StrSubstNo('%1,%2,%3,%4', SalesLineDiscount."Sales Type", SalesLineDiscount."Sales Code", Format(SalesLineDiscount."Starting Date"), Format(SalesLineDiscount."Ending Date"))
-                else
-                    SalesLine."Promotion Code Applied" := StrSubstNo('%1,%2,%3', SalesLineDiscount."Sales Type", Format(SalesLineDiscount."Starting Date"), Format(SalesLineDiscount."Ending Date"));
-            end;
+        if SalesLineDiscount."Line Discount %" <> 0 then begin
+            if SalesLineDiscount."Sales Code" <> '' then
+                SalesLine."Promotion Code Applied" := StrSubstNo('%1,%2,%3,%4', SalesLineDiscount."Sales Type", SalesLineDiscount."Sales Code", Format(SalesLineDiscount."Starting Date"), Format(SalesLineDiscount."Ending Date"))
+            else
+                SalesLine."Promotion Code Applied" := StrSubstNo('%1,%2,%3', SalesLineDiscount."Sales Type", Format(SalesLineDiscount."Starting Date"), Format(SalesLineDiscount."Ending Date"));
+        end;
     end;
 
     var

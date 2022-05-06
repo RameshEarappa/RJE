@@ -41,6 +41,7 @@ pageextension 50040 PostedSalesInvoiceList extends "Posted Sales Invoices"
                     end
                 end;
             }
+            /*
             //TT-RS-20210511-
             action("Print Discount Invoice")
             {
@@ -64,6 +65,7 @@ pageextension 50040 PostedSalesInvoiceList extends "Posted Sales Invoices"
                 end;
             }
             //TT-RS-20210511- 
+            */
         }
     }
 }

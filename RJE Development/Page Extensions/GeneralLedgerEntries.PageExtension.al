@@ -16,7 +16,7 @@ pageextension 50006 "GenLedEntries_PageExt" extends "General Ledger Entries"
             {
                 ApplicationArea = All;
             }
-            field("MH_Applies-To Doc. Type"; Rec."MH_Applies-To Doc. Type")
+            field("MH Applies-To Doc. Type"; Rec."MH Applies-To Doc. Type")
             {
                 ApplicationArea = All;
             }

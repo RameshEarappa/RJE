@@ -1,6 +1,7 @@
 /// <summary>
 /// Report Sales Tax  Discount Invoice (ID 60007).
 /// </summary>
+/*
 REPORT 60014 "Sales Tax  Discount Invoice"
 {
     UsageCategory = ReportsAndAnalysis;
@@ -248,7 +249,7 @@ REPORT 60014 "Sales Tax  Discount Invoice"
                 BEGIN
                     CLEAR(Item);
                     IF Item.Get("No.") THEN;
-                    if (not item.Discount) and (Item."FOC Nominal Cost For VAT calc." <> 0) then
+                    //if (not item.Discount) and (Item."FOC Nominal Cost For VAT calc." <> 0) then
                         CurrReport.Skip();
                     SrNo += 1;
                     clear(Rate_g);
@@ -449,3 +450,4 @@ REPORT 60014 "Sales Tax  Discount Invoice"
         CompName: Text[250];
         Bool: Boolean;
 }
+*/

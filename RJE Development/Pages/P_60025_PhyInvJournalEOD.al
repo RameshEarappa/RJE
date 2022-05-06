@@ -694,6 +694,9 @@ page 60025 "Phys. Inventory Journal EOD"
                     ItemJnlLine: Record "Item Journal Line";
                     Location: Record Location;
                     Location2: Record Location;
+                    RecLoc: Record location;
+                    RecSP: Record "Salesperson/Purchaser";
+                    RecSP1: Record "Salesperson/Purchaser";
                     InvtSetup: Record "Inventory Setup";
                     TransferHeader: Record "Transfer Header";
                     TransferLine: Record "Transfer Line";
@@ -750,15 +753,31 @@ page 60025 "Phys. Inventory Journal EOD"
                             Location2.RESET;
                             Location2.SETRANGE("Use As In-Transit", TRUE);
                             IF Location2.FINDFIRST THEN;
+
+                            RecLoc.Reset;
+                            RecLoc.setrange(Code, Location."Default Replenishment Whse.");
+                            if RecLoc.findfirst then;
+
                             TransferHeader.INIT;
-                            TransferHeader."No." := NoSeriesMngnt.GetNextNo(InvtSetup."Transfer Order Nos.", TODAY, TRUE);
+                            //TransferHeader."No." := NoSeriesMngnt.GetNextNo(InvtSetup."Transfer Order Nos.", TODAY, TRUE);
+                            TransferHeader."No." := 'UL-' + CopyStr(Location."code", StrLen(Location."code") - 4, StrLen(Location.Code)) + '-' + FORMAT(Rec."Posting Date", 0, '<Year,2><Month,2><Day,2>') + '-1';
                             TransferHeader.INSERT(TRUE);
                             TransferHeader.VALIDATE("Transfer-from Code", Location.Code);
                             TransferHeader.VALIDATE("Transfer-to Code", Location."Default Replenishment Whse.");
                             TransferHeader.VALIDATE("In-Transit Code", Location2.Code);
-                            TransferHeader.VALIDATE("Posting Date", WorkDate());
+                            TransferHeader.VALIDATE("Posting Date", Rec."Posting Date");
+                            TransferHeader.Validate("Shipment Date", Rec."Posting Date");
+                            TransferHeader.Validate("Receipt Date", Rec."Posting Date");
                             TransferHeader.Validate("VAN Unloading TO", true);//Added on 10MARCH2021-Krishna
                             TransferHeader.Validate("Workflow Status", TransferHeader."Workflow Status"::Open);//15APR2021
+                            TransferHeader.validate("Transfer-From Salesperson Code", Location."Sales Person");
+                            RecSp.Reset;
+                            if RecSP.get(Location."Sales Person") then;
+                            TransferHeader.VALIDATE("Transfer-From Salesperson Name", RecSP.Name);
+                            TransferHeader.validate("Salesperson Code", RecLoc."Sales Person");
+                            RecSp1.Reset;
+                            if RecSP1.get(RecLoc."Sales Person") then;
+                            TransferHeader.VALIDATE("Salesperson Name", RecSP1.Name);
                             TransferHeader.MODIFY;
                             REPEAT
                                 LineNo += 10000;
@@ -789,6 +808,7 @@ page 60025 "Phys. Inventory Journal EOD"
                                 EXIT;
                             Commit();
                             PAGE.RunModal(5740, TransferHeader);
+                            //  SAME CODE IS WRITTEN IN "RJE JOB AUTOMATION" EXTENSION TO AUTOMATE THIS FUNCTIONALITY
                         END
                     END;
                 END;

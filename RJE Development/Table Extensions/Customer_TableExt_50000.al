@@ -452,6 +452,10 @@ tableextension 50000 Customer extends Customer
         {
             DataClassification = ToBeClassified;
         }
+        field(50058; "VAT Registration No. In Arabic"; Text[20])
+        {
+            DataClassification = ToBeClassified;
+        }
     }
 
 

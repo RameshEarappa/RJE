@@ -259,13 +259,16 @@ tableextension 50004 Item extends Item
         {
             DataClassification = ToBeClassified;
         }
+
         //TT-RS-20210511-
         field(50030; Discount; Boolean)
         {
             Caption = 'Discount';
             DataClassification = ToBeClassified;
+            ObsoleteState = Removed;
         }
         //TT-RS-20210511+
+
     }
 
 

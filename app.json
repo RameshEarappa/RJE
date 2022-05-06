@@ -1,26 +1,24 @@
 {
-  "id": "71526075-ff0a-4af6-b5c5-60eb6f8c1418",
-  "name": "RJEDevelopments",
-  "publisher": "Levtech",
-  "version": "1.0.0.206",
-  "brief": "",
-  "description": "",
-  "privacyStatement": "",
-  "EULA": "",
-  "help": "",
-  "url": "",
-  "logo": "",
-  "dependencies": [],
-  "screenshots": [],
-  "platform": "18.0.0.0",
-  "application": "18.0.0.0",
-  "idRanges": [
-    {
-      "from": 50000,
-      "to": 99999
-    }
-  ],
-  "contextSensitiveHelpUrl": "https://RJEDevelopments.com/help/",
-  "showMyCode": true,
-  "runtime": "7.0"
+    "id": "71526075-ff0a-4af6-b5c5-60eb6f8c1418",
+    "name": "RJEDevelopments",
+    "publisher": "Levtech",
+    "version": "1.0.0.213",
+    "brief": "",
+    "description": "",
+    "privacyStatement": "",
+    "EULA": "",
+    "help": "",
+    "url": "",
+    "logo": "",
+    "dependencies": [],
+    "screenshots": [],
+    "platform": "18.0.0.0",
+    "application": "18.0.0.0",
+    "idRanges": [{
+        "from": 50000,
+        "to": 99999
+    }],
+    "contextSensitiveHelpUrl": "https://RJEDevelopments.com/help/",
+    "showMyCode": true,
+    "runtime": "7.0"
 }

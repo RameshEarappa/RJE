@@ -19,7 +19,7 @@ codeunit 50016 "Reset Sales Invoice Status"
         Header.SetAscending("Entry No.", false);
         Header.SetFilter(Status, '%1|%2', Header.Status::Error, Header.Status::"Posting Error");
         Header.SetRange("Posting Date", WorkDate());
-        Header.SetFilter("Error Remarks", '<>@*There is no enough Inventory*&<>@*You must assign a lot number*');
+        //Header.SetFilter("Error Remarks", '%1|%2', '<>@*There is no enough Inventory*&<>@*You must assign a lot number*', '<>@*We could not update the data right now. Please try again later*');
         Header.SetFilter("Sales Invoice No.", '<>%1', '');
         if Header.FindSet() then begin
             repeat

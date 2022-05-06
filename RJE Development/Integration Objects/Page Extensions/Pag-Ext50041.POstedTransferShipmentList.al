@@ -15,6 +15,11 @@ pageextension 50042 POstedTransferShipmentList extends "Posted Transfer Shipment
                 ApplicationArea = All;
                 Editable = false;
             }
+            field("Transfer Order No."; Rec."Transfer Order No.")
+            {
+                ApplicationArea = All;
+                Editable = false;
+            }
         }
     }
 }
